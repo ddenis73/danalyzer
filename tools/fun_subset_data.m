@@ -27,26 +27,6 @@ function [psgOUT, scoresOUT] = fun_subset_data(psgIN, scoresIN, ar, varargin)
 % psgOUT = A subsetted PSG struct
 %
 % scoresOUT = Sleep stages adjusted to match the subsetted data file
-%% Copyright (c) 2021 Dan Denis, PhD
-%
-% This function is part of the danalyzer toolbox.
-%
-% danalyzer is free software: you can redistribute it and/or modify it
-% under the terms of the GNU General Public License as published by the
-% Free Software Foundation, either version 3 of the License, or (at your
-% option) any later version.
-%
-% danalyzer is distributed in the hope that it will be useful, but
-% WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-% General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License along
-% with danalyzer.  If not, see <http://www.gnu.org/licenses/>.
-%
-% danalyzer is intended for research purposes only. Any commercial or medical
-% use of this software is prohibited. The authors accept no
-% responsibility for its use in this manner.
 %% Default settings for optional inputs
 
 chans2Remove = {};
