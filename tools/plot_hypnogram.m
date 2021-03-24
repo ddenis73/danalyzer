@@ -3,6 +3,24 @@ function plot_hypnogram(stages, varargin)
 % array where n is the number of epochs and each row contains stage
 % information for that epoch. If an array is used, argument 'EpochLength'
 % can be specified as epoch length in seconds (Default = 30)
+
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+%
+%%
 epochLength = 30;
 hypnogramColor = [];
 tickPeriod = 30;
@@ -19,6 +37,7 @@ if find(strcmpi(varargin, 'TickPeriod'))
     tickPeriod = varargin{find(strcmpi(varargin, 'TickPeriod'))+1};
 end
 
+%%
 if isstruct(stages)
     
     % Calculate lights out and lights on epoch number

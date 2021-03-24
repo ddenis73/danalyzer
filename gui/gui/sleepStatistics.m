@@ -23,6 +23,22 @@ function varargout = sleepStatistics(varargin)
 % Edit the above text to modify the response to help sleepStatistics
 
 % Last Modified by GUIDE v2.5 13-Mar-2021 14:53:25
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;

@@ -31,11 +31,28 @@ function sleepStats = fun_sleep_statistics(sleepstages, varargin)
 % Output:
 %
 % sleepStats: A struct containing sleep statistics.
-%%
+
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+
 % Aspects of this function have been modified from the Hume toolbox 
 % (Copyright (c) 2015 Jared M. Saletin, PhD, and Stephanie M. Greer, PhD),
 % available under the GNU General Public License 
 % (https://github.com/jsaletin/hume).
+
 %% Default settings
 
 epochLength  = 30; % Epoch length 30 seconds

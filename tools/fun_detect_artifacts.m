@@ -2,6 +2,22 @@ function [ar, psgOUT] = fun_detect_artifacts(psgIN, sleepstages, varargin)
 % Automated artifact rejection of sleep EEG data based on Hjorth
 % parameters. 
 
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+
 %% Default settings
 
 winSize = sleepstages.hdr.win;

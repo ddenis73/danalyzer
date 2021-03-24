@@ -24,6 +24,23 @@ function varargout = data_viewer(varargin)
 
 % Last Modified by GUIDE v2.5 13-Mar-2021 16:04:21
 
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+%%
+
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -271,17 +288,30 @@ handles.plotParam.currSample = 1; % Tracks arbitary jumps
 if isempty(get(handles.events_file_string, 'String'))
     
     if ~strcmp(get(handles.lights_out_time, 'String'), "")
-        eventsTable = {get(handles.lights_out_time, 'String') 'Lights off'};
-        lOffTable = dan_get_event_latencies(eventsTable, handles.psg.hdr.recStart, handles.psg.hdr.srate);
-        handles.psg.events = [handles.psg.events; lOffTable];
-        handles.psg.events = sortrows(handles.psg.events, 2);
+        
+        isLOut = find(ismember(lower(handles.psg.events{:,4}), 'lights out') |...
+            ismember(lower(handles.psg.events{:,4}), 'lights off'));
+        
+        if isempty(isLOut)
+            eventsTable = {get(handles.lights_out_time, 'String') 'Lights off'};
+            lOffTable = dan_get_event_latencies(eventsTable, handles.psg.hdr.recStart, handles.psg.hdr.srate);
+            handles.psg.events = [handles.psg.events; lOffTable];
+            handles.psg.events = sortrows(handles.psg.events, 2);
+        end
     end
     
     if ~strcmp(get(handles.lights_on_time, 'String'), "")
-        eventsTable = {get(handles.lights_on_time, 'String') 'Lights on'};
-        lOnTable = dan_get_event_latencies(eventsTable, handles.psg.hdr.recStart, handles.psg.hdr.srate);
-        handles.psg.events = [handles.psg.events; lOnTable];
-        handles.psg.events = sortrows(handles.psg.events, 2);
+        
+        isLOn = find(ismember(lower(handles.psg.events{:,4}), 'lights on'));
+        
+        if isempty(isLOn)
+            
+            eventsTable = {get(handles.lights_on_time, 'String') 'Lights on'};
+            lOnTable = dan_get_event_latencies(eventsTable, handles.psg.hdr.recStart, handles.psg.hdr.srate);
+            handles.psg.events = [handles.psg.events; lOnTable];
+            handles.psg.events = sortrows(handles.psg.events, 2);
+            
+        end
     end
     
 end
@@ -1205,7 +1235,7 @@ if ~isempty(handles.montage.chanList(1).X)
     
     % Interpolate
     interp = fun_interpolate_data(handles.psg.data(eegChans,:), handles.psg.chans(eegChans), interpList(eegChans));
-        
+    
     % Put interpolated data back into the original data
     
     handles.psg.data(eegChans,:) = interp;

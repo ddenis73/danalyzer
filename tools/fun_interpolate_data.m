@@ -22,7 +22,23 @@ function data = fun_interpolate_data(data, chans, badchans, varargin)
 %
 % data: A channel x timepoints array with interpolated values
 %
-%%
+
+%% © 2021 Dan Denis, PhD
+%
+% This function is part of the danalyzer toolbox. danalyzer is free
+% software: you can redistribute it and/or modify it under the terms of the
+% GNU General Public License as published by the Free Software Foundation,
+% either version 3 of the License or any later version.
+%
+% danalyzer is distributed with the hope that others will find it useful.
+% It comes without any warranty; without even the implied warranty of
+% merchantability or fitness for a particular purpose. See the GNU General
+% Public License for more details.
+
+% danalyzer is intended for research purposes only. Any commercial or
+% medical use of this software is prohibited. The author accepts no
+% responsibility for its use in this manner
+
 % This code is an implementation of algorithms described by 
 % Perrin, Pernier, Bertrand, and Echallier (1989). Code heavily based on
 % Cohen MX (2014). Analyzing Neural Time Series Data.
