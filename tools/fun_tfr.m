@@ -8,7 +8,7 @@ function [tfr, times, freqs, empfwhm] = fun_tfr(data, srate, limits, varargin)
 %
 % Required inputs:
 %
-% data: A nx3 channel x time x epoch array
+% data: A channel x time x epoch array
 %
 % srate: Sampling rate of the data (in Hz)
 %
