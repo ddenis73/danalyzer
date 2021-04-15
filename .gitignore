@@ -2,5 +2,9 @@ tools/fun_sleep_spindles.m
 tools/fun_slow_oscillations.m
 tools/fun_so_spindle_coupling.m
 tools/fun_spindle_features.m
+tools/fun_cramer_von_mises.m
+tools/fun_otsu_criterion.m
+tools/fun_spindle_coordination.m
 gui/montages/Dose_chans.mat
 gui/montages/dose_montage
+*.asv

@@ -60,10 +60,14 @@ if length(f) == 1 && handles.hypSpec == 1
         hypnoY(str2double(get(handles.current_epoch_number, 'String'))), 20, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'm')
     
     if exist('lOutEpoch', 'var')
-        line(handles.hypngram_axes, [lOutEpoch lOutEpoch], [0 8], 'Color', [0 1 0 0.3], 'LineWidth', 3)
+        if ~isempty(lOutEpoch)
+            line(handles.hypngram_axes, [lOutEpoch lOutEpoch], [0 8], 'Color', [0 1 0 0.3], 'LineWidth', 3)
+        end
     end
     if exist('lOnEpoch', 'var')
-        line(handles.hypngram_axes, [lOnEpoch lOnEpoch], [0 8], 'Color', [0 1 0 0.3], 'LineWidth', 3)
+        if ~isempty(lOnEpoch)
+            line(handles.hypngram_axes, [lOnEpoch lOnEpoch], [0 8], 'Color', [0 1 0 0.3], 'LineWidth', 3)
+        end
     end
     
     if ~isempty(badEpochs)

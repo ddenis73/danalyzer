@@ -235,7 +235,7 @@ if strcmpi(chDetect, 'yes')
         fprintf(['Interpolating ' num2str(badChanN) ' channels...'])
         
         psgIN.data = fun_interpolate_data(psgIN.data, psgIN.chans, badchans);
-        badchans = zeros(length(psgIN.chans, 1));
+        badchans = zeros(length(psgIN.chans));
         
         interpTime = toc;
         disp(['Finished in ' num2str(interpTime) ' seconds'])
@@ -383,7 +383,7 @@ if strcmpi(epDetect, 'yes')
         
         for ep_i = 1:size(epochIdx, 1)
             
-            if any(stageChanMask(:, ep_i))
+            if find(stageChanMask(:, ep_i)) < epChanThresh
                 
                 psgOUT.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)) = fun_interpolate_data(...
                     psgIN.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)), psgIN.chans, stageChanMask(:, ep_i));
