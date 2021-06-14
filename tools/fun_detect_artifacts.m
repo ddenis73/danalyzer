@@ -143,9 +143,9 @@ if strcmpi(chDetect, 'yes')
         
         for it_i = 1:chIterations
             
-            actT = find(sigAct(chan_i,:) > nanmean(sigAct(chan_i,:)) + chEpochThresh * nanstd(sigAct(chan_i,:)));
-            mobT = find(sigMob(chan_i,:) > nanmean(sigMob(chan_i,:)) + chEpochThresh * nanstd(sigMob(chan_i,:)));
-            comT = find(sigCom(chan_i,:) > nanmean(sigCom(chan_i,:)) + chEpochThresh * nanstd(sigCom(chan_i,:)));
+            actT = find(sigAct(chan_i,:) > mean(sigAct(chan_i,:), 'omitnan') + chEpochThresh * std(sigAct(chan_i,:), 'omitnan'));
+            mobT = find(sigMob(chan_i,:) > mean(sigMob(chan_i,:), 'omitnan') + chEpochThresh * std(sigMob(chan_i,:), 'omitnan'));
+            comT = find(sigCom(chan_i,:) > mean(sigCom(chan_i,:), 'omitnan') + chEpochThresh * std(sigCom(chan_i,:), 'omitnan'));
             
             chanEpMask(chan_i, actT) = 1;
             chanEpMask(chan_i, mobT) = 1;
@@ -192,9 +192,9 @@ if strcmpi(chDetect, 'yes')
                 
                 c = setdiff(chans2Keep, chan_i);
                 
-                actM = [nanmean(sigAct2(c, ep_i)) nanstd(sigAct2(c, ep_i))];
-                mobM = [nanmean(sigMob2(c, ep_i)) nanstd(sigMob2(c, ep_i))];
-                comM = [nanmean(sigCom2(c, ep_i)) nanstd(sigCom2(c, ep_i))];
+                actM = [mean(sigAct2(c, ep_i), 'omitnan') std(sigAct2(c, ep_i), 'omitnan')];
+                mobM = [mean(sigMob2(c, ep_i), 'omitnan') std(sigMob2(c, ep_i), 'omitnan')];
+                comM = [mean(sigCom2(c, ep_i), 'omitnan') std(sigCom2(c, ep_i), 'omitnan')];
                 
                 zAct(chan_i, ep_i) = abs((sigAct2(chan_i, ep_i) - actM(1)) / actM(2));
                 zMob(chan_i, ep_i) = abs((sigMob2(chan_i, ep_i) - mobM(1)) / mobM(2));
@@ -306,9 +306,9 @@ if strcmpi(epDetect, 'yes')
             
             for it_i = 1:epIterations
                 
-                actT = find(sigAct(chan_i,:) > nanmean(sigAct(chan_i,:)) + epEpochThresh * nanstd(sigAct(chan_i,:)));
-                mobT = find(sigMob(chan_i,:) > nanmean(sigMob(chan_i,:)) + epEpochThresh * nanstd(sigMob(chan_i,:)));
-                comT = find(sigCom(chan_i,:) > nanmean(sigCom(chan_i,:)) + epEpochThresh * nanstd(sigCom(chan_i,:)));
+                actT = find(sigAct(chan_i,:) > mean(sigAct(chan_i,:), 'omitnan') + epEpochThresh * std(sigAct(chan_i,:), 'omitnan'));
+                mobT = find(sigMob(chan_i,:) > mean(sigMob(chan_i,:), 'omitnan') + epEpochThresh * std(sigMob(chan_i,:), 'omitnan'));
+                comT = find(sigCom(chan_i,:) > mean(sigCom(chan_i,:), 'omitnan') + epEpochThresh * std(sigCom(chan_i,:), 'omitnan'));
                 
                 stageMask(chan_i, actT) = 1;
                 stageMask(chan_i, mobT) = 1;

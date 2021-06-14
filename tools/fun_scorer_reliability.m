@@ -33,9 +33,9 @@ function reliability = fun_scorer_reliability(sleepstages, varargin)
 % medical use of this software is prohibited. The author accepts no
 % responsibility for its use in this manner
 
-% Aspects of this function have been modified from the Hume toolbox 
+% Aspects of this function have been modified from the Hume toolbox
 % (Copyright (c) 2015 Jared M. Saletin, PhD, and Stephanie M. Greer, PhD),
-% available under the GNU General Public License 
+% available under the GNU General Public License
 % (https://github.com/jsaletin/hume).
 
 %% Default settings
@@ -168,8 +168,11 @@ for i = 1:length(sleepstages)
             [sum(squeeze(table(c,1,:)));[sum(squeeze(table(c,2,:)));sum(squeeze(table(c,3,:)));sum(squeeze(table(c,4,:)));sum(squeeze(table(c,5,:)));sum(squeeze(table(c,6,:)));sum(squeeze(table(c,7,:)))]; sum(sum(squeeze(table(c,:,:))))]];
         percentAgreement(c,:) = [(diag(squeeze(table(c,:,:)))'./sum(squeeze(table(c,:,:)),1)).*100 sum(diag(squeeze(table(c,:,:))))'./sum(sum(squeeze(table(c,:,:))))*100];
         
-        fa{:, c} = h;
-        
+        if exist('reliabilityReport', 'var')
+            
+            fa{:, c} = h;
+            
+        end
         c = c+1;
         
     end

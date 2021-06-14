@@ -60,14 +60,71 @@ if isa(sleepstagesIN, 'table')
         
     end
     
-else
-    sleepstagesOUT.stages = zeros(height(sleepstagesIN), 1);
+elseif isa(sleepstagesIN, 'cell')
     
-    if isa(sleepstagesIN.Var1(1), 'double')
+    sleepstagesOUT.stages = zeros(size(sleepstagesIN, 1), 1);
+    
+    if isa(sleepstagesIN{1}, 'double')
         
         for i = 1:height(sleepstagesIN)
             
-            if strcmpi(sleepstagesIN.Var1(i), str2double(values{1}))
+            if strcmpi(sleepstagesIN(i), str2double(values{1}))
+                sleepstagesOUT.stages(i,:) = 0;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{2}))
+                sleepstagesOUT.stages(i,:) = 1;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{3}))
+                sleepstagesOUT.stages(i,:) = 2;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{4}))
+                sleepstagesOUT.stages(i,:) = 3;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{5}))
+                sleepstagesOUT.stages(i,:) = 4;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{6}))
+                sleepstagesOUT.stages(i,:) = 5;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{7}))
+                sleepstagesOUT.stages(i,:) = 6;
+            elseif strcmpi(sleepstagesIN(i), str2double(values{8}))
+                sleepstagesOUT.stages(i,:) = 7;
+            else
+                sleepstagesOUT.stages = 7;
+            end
+            
+        end
+        
+    else
+        
+        for i = 1:size(sleepstagesIN, 1)
+            
+            if strcmpi(sleepstagesIN(i), values{1})
+                sleepstagesOUT.stages(i,:) = 0;
+            elseif strcmpi(sleepstagesIN(i), values{2})
+                sleepstagesOUT.stages(i,:) = 1;
+            elseif strcmpi(sleepstagesIN(i), values{3})
+                sleepstagesOUT.stages(i,:) = 2;
+            elseif strcmpi(sleepstagesIN(i), values{4})
+                sleepstagesOUT.stages(i,:) = 3;
+            elseif strcmpi(sleepstagesIN(i), values{5})
+                sleepstagesOUT.stages(i,:) = 4;
+            elseif strcmpi(sleepstagesIN(i), values{6})
+                sleepstagesOUT.stages(i,:) = 5;
+            elseif strcmpi(sleepstagesIN(i), values{7})
+                sleepstagesOUT.stages(i,:) = 6;
+            elseif strcmpi(sleepstagesIN(i), values{8})
+                sleepstagesOUT.stages(i,:) = 7;
+            else
+                sleepstagesOUT.stages = 7;
+            end
+        end
+        
+    end
+   
+else
+    sleepstagesOUT.stages = zeros(size(sleepstagesIN), 1);
+    
+    if isa(sleepstagesIN(1), 'double')
+        
+        for i = 1:height(sleepstagesIN)
+            
+            if strcmpi(sleepstagesIN(i), str2double(values{1}))
                 sleepstagesOUT.stages(i,:) = 0;
             elseif strcmpi(sleepstagesIN(i), str2double(values{2}))
                 sleepstagesOUT.stages(i,:) = 1;

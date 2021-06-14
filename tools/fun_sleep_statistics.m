@@ -48,9 +48,9 @@ function sleepStats = fun_sleep_statistics(sleepstages, varargin)
 % medical use of this software is prohibited. The author accepts no
 % responsibility for its use in this manner
 
-% Aspects of this function have been modified from the Hume toolbox 
+% Aspects of this function have been modified from the Hume toolbox
 % (Copyright (c) 2015 Jared M. Saletin, PhD, and Stephanie M. Greer, PhD),
-% available under the GNU General Public License 
+% available under the GNU General Public License
 % (https://github.com/jsaletin/hume).
 
 %% Default settings
@@ -64,9 +64,9 @@ if isstruct(sleepstages)
     lOffTime     = sleepstages.hdr.lOff;
     lOnTime      = sleepstages.hdr.lOn;
 else
-    recStartTime = [];
-    lOffTime     = [];
-    lOnTime      = [];
+    recStartTime = ' ';
+    lOffTime     = ' ';
+    lOnTime      = ' ';
 end
 
 % Optional inputs
@@ -103,6 +103,10 @@ end
 if isempty(recStartTime)
     lOffEpoch = 1;
     lOnEpoch  = length(stages);
+    
+    lOffTime     = datetime(lOffTime, 'Format', 'HH:mm:ss.SSS');
+    lOnTime      = datetime(lOnTime, 'Format', 'HH:mm:ss.SSS');
+    
     
     % else, calculate the epoch of lights off/on
 else
@@ -255,12 +259,12 @@ if exist('sleepReport', 'var')
     l1.FontSize = '24';
     l1.FontFamilyName = 'Arial';
     l1.Bold = true;
-   
+    
     l2 = Paragraph(['Scored by: ' scorerID]);
     l2.FontSize = '22';
     l2.FontFamilyName = 'Arial';
     l2.Bold = true;
-            
+    
     l3 = Paragraph(Text(sprintf(['Lights off: ' lOffString '\n'...
         'Lights on: ' lOnString '\n'...
         'Time in bed: ' num2str(tib, '%.1f') ' min\n'...
@@ -271,12 +275,12 @@ if exist('sleepReport', 'var')
     l3.WhiteSpace = 'preserve';
     l3.FontSize = '20';
     l3.FontFamilyName = 'Arial';
-        
+    
     l4 = Paragraph('Table 1: Sleep statistics (of time in bed)');
     l4.Bold = true;
     l4.FontSize = '20';
     l4.FontFamilyName = 'Arial';
-
+    
     table1 = Table({' ' 'Wake' 'N1' 'N2' 'N3' 'N4' 'REM' 'MVT' 'Total'; ...
         'Minutes' num2str(stageMinTib(1), '%.2f'), num2str(stageMinTib(2), '%.2f'), num2str(stageMinTib(3), '%.2f'),...
         num2str(stageMinTib(4), '%.2f'), num2str(stageMinTib(5), '%.2f'), num2str(stageMinTib(6), '%.2f'),...
@@ -303,7 +307,7 @@ if exist('sleepReport', 'var')
     table2.RowSep = 'solid';
     table2.Width = '50%';
     table2.TableEntriesStyle = {FontFamily('Arial'), FontSize('20')};
-       
+    
     p1 = figure;
     
     if length(sleepstages.stages) < 150
@@ -312,7 +316,7 @@ if exist('sleepReport', 'var')
         plot_hypnogram(sleepstages, 'TickPeriod', 120);
         colormap(p1, hypnomap)
     end
-        
+    
     if isfield(sleepstages, 'spectogram')
         
         p2 = figure;
@@ -324,7 +328,7 @@ if exist('sleepReport', 'var')
             plot_spectogram(sleepstages.spectogram.specto, sleepstages.spectogram.freqs, [0 30], sleepstages, 1,...
                 'TickPeriod', 120);
         end
-            
+        
         caxis(gca, [0 1])
         colormap(gca, hot)
         

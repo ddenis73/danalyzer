@@ -33,7 +33,7 @@ function [tfr, times, freqs, empfwhm] = fun_tfr(data, srate, limits, varargin)
 % is 'morlet'
 %
 % FWHM: Full-width half max of the wavelet (frequency resolution). Either a
-% single value or an array indicating the FWHM at each frequency. Specifreq_ied
+% single value or an array indicating the FWHM at each frequency. Specified
 % in ms. Default = 500
 %
 % Outputs:
