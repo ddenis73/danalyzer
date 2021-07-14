@@ -1,7 +1,18 @@
 function eventsOut = dan_get_event_latencies(eventsIn, recStart, srate)
-
 % Takes an events table with datestrings and converts them from durations
 % from recStart
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+%%
+
 
 % Recording start time is t0
 t0 = datetime(datestr(recStart, 'HH:MM:ss.FFF'), 'Format', 'HH:mm:ss.SSS');

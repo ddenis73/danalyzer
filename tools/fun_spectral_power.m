@@ -1,4 +1,4 @@
-function [spectralPower, freqs, bandPowerA, bandPowerR] = fun_spectral_power(data, srate, varargin)
+function [spectralPower, freqs] = fun_spectral_power(data, srate, varargin)
 % Obtain estimates of power spectral density (PSD) in EEG data using the pwelch
 % function. The default settings obtain PSD estimates on the temporal
 % derivative of the data using a Hamming window (5 seconds long, 50%
@@ -26,13 +26,6 @@ function [spectralPower, freqs, bandPowerA, bandPowerR] = fun_spectral_power(dat
 % obtained from the EEG time series. 'none' returns absolute PSD. Default =
 % 'diff'.
 %
-% 'FrequencyBands' = An nx2 array containing a lower and upper frequency
-% for each frequency band. Default = [0 1; 1 4; 4 8; 8 12; 12 15; 15 25]
-%
-% 'BandMethod' = Method for how to arrive and band power estimates.
-% 'average' returns the mean PSD for each frequency bin in the band. 'sum'
-% returns the sum PSD for each frequency bin in the band.
-%
 % Outputs:
 %
 % spectralPower = A frequency x channel array containing the PSD estimate
@@ -41,29 +34,16 @@ function [spectralPower, freqs, bandPowerA, bandPowerR] = fun_spectral_power(dat
 % freqs = A nx1 array indicating the frequency at each bin (each row of
 % spectralPower)
 %
-% bandPowerA = Averaged/summed PSD estimates in each specified frequency
-% band.
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
 %
-% bandPowerR = Relative power in each frequency band. Calculate as the the
-% of total power from the lowest to the highest requested frequency.
-
-%% © 2021 Dan Denis, PhD
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
 %
-% This function is part of the danalyzer toolbox. danalyzer is free
-% software: you can redistribute it and/or modify it under the terms of the
-% GNU General Public License as published by the Free Software Foundation,
-% either version 3 of the License or any later version.
-%
-% danalyzer is distributed with the hope that others will find it useful.
-% It comes without any warranty; without even the implied warranty of
-% merchantability or fitness for a particular purpose. See the GNU General
-% Public License for more details.
-
-% danalyzer is intended for research purposes only. Any commercial or
-% medical use of this software is prohibited. The author accepts no
-% responsibility for its use in this manner
-
-
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
 %% Default settings
 
 winSize     = 5;
@@ -136,22 +116,3 @@ elseif strcmpi(transform, 'log')
 elseif strcmpi(transform, 'db')
     fprintf('Data transformed to db scale\n');
 end
-
-%% Calculate band power
-
-% Initialize
-bandPowerA = zeros(length(freqBands), size(spectralPower, 2));
-
-% Power in each band
-for i = 1:length(freqBands)
-    
-    if strcmpi(bandAverage, 'average')
-        bandPowerA(i, :) = mean(spectralPower(freqs > freqBands(i, 1) & freqs <= freqBands(i, 2), :));
-    elseif strcmpi(bandAverage, 'sum')
-        bandPowerA(i, :) = sum(spectralPower(freqs > freqBands(i, 1) & freqs >= freqBands(i, 2), :));
-    end
-    
-end
-        
-% Relative power (% of total power from lowest to highest frequency requested)
-bandPowerR = (bandPowerA ./ sum(bandPowerA)) * 100;

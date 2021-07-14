@@ -1,10 +1,17 @@
 function handles = dan_select_data(handles, subsetOpts)
 % Function to remove segments of data e.g. only look at clean N2 epochs
 %
-% Inputs: handles
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
 %
-% subsetOpts
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
 %
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+
 %% 
 chansToRemove = strsplit(subsetOpts{3}, ' ');
 

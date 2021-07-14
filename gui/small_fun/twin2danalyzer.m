@@ -1,6 +1,16 @@
 function sleepstagesOUT = twin2danalyzer(sleepstagesIN)
 % Convert a TWin score file to a danalyzer score file.
-
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+%%
 for countRow=1:height(sleepstagesIN)
     % In the cell with the time (col 1) and sleep stage (column 2) info, find text that indicates the current sleep stage
     if strcmp(sleepstagesIN.Var3(countRow),'Stage - W')

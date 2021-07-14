@@ -1,6 +1,16 @@
 function handles = dan_update_epoch_info_string(handles)
-
 % Updates the epoch information bar at the bottom of the GUI
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+%%
 
 if handles.psg.stages.s1.stages(handles.plotParam.epochIdx) == 0
     set(handles.current_epoch_info, 'String', 'Wake');

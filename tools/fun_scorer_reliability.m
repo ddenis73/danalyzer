@@ -16,28 +16,20 @@ function reliability = fun_scorer_reliability(sleepstages, varargin)
 %
 % reliability: A struct containing inter-rater reliability between the two
 % score files
-
-%% © 2021 Dan Denis, PhD
+%% 
+% Authors:  Dan Denis
+% Date:     2021-07-14
 %
-% This function is part of the danalyzer toolbox. danalyzer is free
-% software: you can redistribute it and/or modify it under the terms of the
-% GNU General Public License as published by the Free Software Foundation,
-% either version 3 of the License or any later version.
+% Remarks:
+%   This function is based on code by Jared M. Saletin found in
+%   the Hume toolbox (https://github.com/jsaletin/hume), originally
+%   released under a GNU General Public License v3 License
 %
-% danalyzer is distributed with the hope that others will find it useful.
-% It comes without any warranty; without even the implied warranty of
-% merchantability or fitness for a particular purpose. See the GNU General
-% Public License for more details.
-
-% danalyzer is intended for research purposes only. Any commercial or
-% medical use of this software is prohibited. The author accepts no
-% responsibility for its use in this manner
-
-% Aspects of this function have been modified from the Hume toolbox
-% (Copyright (c) 2015 Jared M. Saletin, PhD, and Stephanie M. Greer, PhD),
-% available under the GNU General Public License
-% (https://github.com/jsaletin/hume).
-
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
 %% Default settings
 
 if find(strcmpi(varargin, 'Report'))
@@ -168,11 +160,8 @@ for i = 1:length(sleepstages)
             [sum(squeeze(table(c,1,:)));[sum(squeeze(table(c,2,:)));sum(squeeze(table(c,3,:)));sum(squeeze(table(c,4,:)));sum(squeeze(table(c,5,:)));sum(squeeze(table(c,6,:)));sum(squeeze(table(c,7,:)))]; sum(sum(squeeze(table(c,:,:))))]];
         percentAgreement(c,:) = [(diag(squeeze(table(c,:,:)))'./sum(squeeze(table(c,:,:)),1)).*100 sum(diag(squeeze(table(c,:,:))))'./sum(sum(squeeze(table(c,:,:))))*100];
         
-        if exist('reliabilityReport', 'var')
-            
-            fa{:, c} = h;
-            
-        end
+        fa{:, c} = h;
+        
         c = c+1;
         
     end

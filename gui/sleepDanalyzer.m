@@ -14,7 +14,7 @@
 % medical use of this software is prohibited. The author accepts no
 % responsibility for its use in this manner
 %%
-se_version = '0.9.1';
+se_version = '0.9-beta.2';
 se_path = fileparts(which('sleepDanalyzer'));
 % Check for EEGLAB
 

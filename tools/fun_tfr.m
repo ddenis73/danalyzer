@@ -3,9 +3,12 @@ function [tfr, times, freqs, empfwhm] = fun_tfr(data, srate, limits, varargin)
 % decomposition is performed using complex Morlet wavelets, based on code
 % described in:
 %
-% Cohen MX (2019). A better way to defreq_ine and describe Morlet wavelets 
+% Cohen MX (2019). A better way to define and describe Morlet wavelets 
 % for time-frequency analysis. NeuroImage 199 (81-86).
 %
+% This function should be considered highly experimental and may not yield
+% desirble results in all settings
+
 % Required inputs:
 %
 % data: A channel x time x epoch array
@@ -45,22 +48,20 @@ function [tfr, times, freqs, empfwhm] = fun_tfr(data, srate, limits, varargin)
 % freqs: The frequencty (in Hz) for each frequency element in tfr
 %
 % empfwhm: The resulting frequency resolution of the wavelets (in Hz)
-
-%% © 2021 Dan Denis, PhD
 %
-% This function is part of the danalyzer toolbox. danalyzer is free
-% software: you can redistribute it and/or modify it under the terms of the
-% GNU General Public License as published by the Free Software Foundation,
-% either version 3 of the License or any later version.
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
 %
-% danalyzer is distributed with the hope that others will find it useful.
-% It comes without any warranty; without even the implied warranty of
-% merchantability or fitness for a particular purpose. See the GNU General
-% Public License for more details.
-
-% danalyzer is intended for research purposes only. Any commercial or
-% medical use of this software is prohibited. The author accepts no
-% responsibility for its use in this manner
+% Remarks:
+%   Based on code written by Mike X. Cohen (Cohen MX (2019).
+%   A better way to define and describe Morlet wavelets 
+%   for time-frequency analysis. NeuroImage 199 (81-86)).
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
 %% Defaults for optional inputs
 
 freqs    = linspace(2, 30, 40); % Frequencies to analyze

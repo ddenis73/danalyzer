@@ -1,7 +1,18 @@
 function dataOut = dan_field_search(specData, thingy, stages)
-
 % Search a specData struct for spindles or so (thingy) in a particular
 % sleep stage
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+%%
+
 specDataFields = fieldnames(specData);
 fieldIndex = ~cellfun('isempty', regexp(specDataFields, thingy));
 

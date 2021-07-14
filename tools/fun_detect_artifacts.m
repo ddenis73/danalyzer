@@ -1,23 +1,52 @@
-function [ar, psgOUT] = fun_detect_artifacts(psgIN, sleepstages, varargin)
+function [ar, dataOUT] = fun_detect_artifacts(dataIN, sleepstages, varargin)
 % Automated artifact rejection of sleep EEG data based on Hjorth
-% parameters. 
-
-%% © 2021 Dan Denis, PhD
+% parameters. This function is an attempt of a MATLAB implementation of the
+% artifact rejection functions in the Luna toolbox. Artifact rejection
+% works in two steps, first on the channel level, and then on the epoch
+% level.
 %
-% This function is part of the danalyzer toolbox. danalyzer is free
-% software: you can redistribute it and/or modify it under the terms of the
-% GNU General Public License as published by the Free Software Foundation,
-% either version 3 of the License or any later version.
+% This function should be considered highly experimental and may not yield
+% desirble results in all settings
 %
-% danalyzer is distributed with the hope that others will find it useful.
-% It comes without any warranty; without even the implied warranty of
-% merchantability or fitness for a particular purpose. See the GNU General
-% Public License for more details.
-
-% danalyzer is intended for research purposes only. Any commercial or
-% medical use of this software is prohibited. The author accepts no
-% responsibility for its use in this manner
-
+% Required inputs:
+%
+% dataIN = A danalyzer psg structure
+%
+% sleepstages = A danalyzer sleepstages structure
+%
+% Optional inputs:
+%
+% ChannelDetection = Automatically identify bad channels across the full
+% recording. 'Yes' or 'No'. Default = 'Yes'
+%
+% ChannelParameters = A 1x4 cell array containing parameters for
+% identifying bad channels {threshold(n*SD) iterations %channels,
+% interpolate}. Default = {3 2 50 'no'}
+%
+% EpochDetection = Automatically identify bad epochs. 'Yes' or 'No'.
+% Default = 'Yes'
+%
+% EpochParameters = A 1x4 cell array containing parameters for identifying
+% bad epochs {threshold(n*SD) iteration nChannels interpolate}. Default =
+% {3 2 1 'yes'}
+%
+% Outputs:
+%
+% ar = A danalyzer ar struct containing information about bad channels
+% (ar.badchans) and bad epochs (ar.badepochs)
+%
+% dataOUT = If bad channels were interpolated, dataOUT will be a danalyzer
+% psg struct with bad channels interpolated
+%% 
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
 %% Default settings
 
 winSize = sleepstages.hdr.win;
@@ -63,17 +92,17 @@ if find(strcmpi(varargin, 'IgnoreChannels'))
 end
 
 if iscell(ignoreIdx)
-    chans2Ignore = find(ismember({psgIN.chans.labels}, ignoreIdx));
-    chans2Keep   = setdiff(1:length(psgIN.chans), chans2Ignore);
+    chans2Ignore = find(ismember({dataIN.chans.labels}, ignoreIdx));
+    chans2Keep   = setdiff(1:length(dataIN.chans), chans2Ignore);
     
 else
     chans2Ignore = ignoreIdx;
-    chans2Keep   = setdiff(1:length(psgIN.chans), chans2Ignore);
+    chans2Keep   = setdiff(1:length(dataIN.chans), chans2Ignore);
 end
 
 % Initialize the ar structure
 badepochs = zeros(length(sleepstages.stages), 1);
-badchans  = zeros(length(psgIN.chans), 1);
+badchans  = zeros(length(dataIN.chans), 1);
 
 %% Print parameters
 
@@ -101,7 +130,7 @@ end
 
 %% Subset just sleep epochs
 
-psg2 = fun_subset_data(psgIN, sleepstages, [], 'stage', 1:5,...
+psg2 = fun_subset_data(dataIN, sleepstages, [], 'stage', 1:5,...
     'Verbose', 'no');
 
 %% Detect bad channels
@@ -114,16 +143,16 @@ if strcmpi(chDetect, 'yes')
 
     
     epochIdx   = indexepochs(winSize * psg2.hdr.srate, psg2.hdr.samples);
-    chanEpMask = zeros(length(psgIN.chans), length(epochIdx));
+    chanEpMask = zeros(length(dataIN.chans), length(epochIdx));
     
-    sigAct = zeros(length(psgIN.chans), length(epochIdx));
-    sigMob = zeros(length(psgIN.chans), length(epochIdx));
-    sigCom = zeros(length(psgIN.chans), length(epochIdx));
+    sigAct = zeros(length(dataIN.chans), length(epochIdx));
+    sigMob = zeros(length(dataIN.chans), length(epochIdx));
+    sigCom = zeros(length(dataIN.chans), length(epochIdx));
     
     % Calculate Hjorth parameters for each channel and epoch
     for ep_i = 1:length(epochIdx)
         
-        for chan_i = 1:length(psgIN.chans)
+        for chan_i = 1:length(dataIN.chans)
             
             % Select epoch
             epochData = psg2.data(chan_i, epochIdx(ep_i, 1):epochIdx(ep_i, 2));
@@ -139,13 +168,13 @@ if strcmpi(chDetect, 'yes')
     
     % Find channels/epochs above threshold
     
-    for chan_i = 1:length(psgIN.chans)
+    for chan_i = 1:length(dataIN.chans)
         
         for it_i = 1:chIterations
             
-            actT = find(sigAct(chan_i,:) > mean(sigAct(chan_i,:), 'omitnan') + chEpochThresh * std(sigAct(chan_i,:), 'omitnan'));
-            mobT = find(sigMob(chan_i,:) > mean(sigMob(chan_i,:), 'omitnan') + chEpochThresh * std(sigMob(chan_i,:), 'omitnan'));
-            comT = find(sigCom(chan_i,:) > mean(sigCom(chan_i,:), 'omitnan') + chEpochThresh * std(sigCom(chan_i,:), 'omitnan'));
+            actT = find(sigAct(chan_i,:) > nanmean(sigAct(chan_i,:)) + chEpochThresh * nanstd(sigAct(chan_i,:)));
+            mobT = find(sigMob(chan_i,:) > nanmean(sigMob(chan_i,:)) + chEpochThresh * nanstd(sigMob(chan_i,:)));
+            comT = find(sigCom(chan_i,:) > nanmean(sigCom(chan_i,:)) + chEpochThresh * nanstd(sigCom(chan_i,:)));
             
             chanEpMask(chan_i, actT) = 1;
             chanEpMask(chan_i, mobT) = 1;
@@ -170,13 +199,13 @@ if strcmpi(chDetect, 'yes')
     % For each channel, calculate a Z score for each epoch based on the mean/SD
     % of all other channels
     
-    zAct = zeros(length(psgIN.chans), size(sigAct2, 2));
-    zMob = zeros(length(psgIN.chans), size(sigMob2, 2));
-    zCom = zeros(length(psgIN.chans), size(sigCom2, 2));
+    zAct = zeros(length(dataIN.chans), size(sigAct2, 2));
+    zMob = zeros(length(dataIN.chans), size(sigMob2, 2));
+    zCom = zeros(length(dataIN.chans), size(sigCom2, 2));
     
-    chanOut = zeros(length(psgIN.chans), size(sigAct2, 2));
+    chanOut = zeros(length(dataIN.chans), size(sigAct2, 2));
     
-    for chan_i = 1:length(psgIN.chans)
+    for chan_i = 1:length(dataIN.chans)
         
         if ismember(chan_i, chans2Ignore)
             
@@ -192,9 +221,9 @@ if strcmpi(chDetect, 'yes')
                 
                 c = setdiff(chans2Keep, chan_i);
                 
-                actM = [mean(sigAct2(c, ep_i), 'omitnan') std(sigAct2(c, ep_i), 'omitnan')];
-                mobM = [mean(sigMob2(c, ep_i), 'omitnan') std(sigMob2(c, ep_i), 'omitnan')];
-                comM = [mean(sigCom2(c, ep_i), 'omitnan') std(sigCom2(c, ep_i), 'omitnan')];
+                actM = [nanmean(sigAct2(c, ep_i)) nanstd(sigAct2(c, ep_i))];
+                mobM = [nanmean(sigMob2(c, ep_i)) nanstd(sigMob2(c, ep_i))];
+                comM = [nanmean(sigCom2(c, ep_i)) nanstd(sigCom2(c, ep_i))];
                 
                 zAct(chan_i, ep_i) = abs((sigAct2(chan_i, ep_i) - actM(1)) / actM(2));
                 zMob(chan_i, ep_i) = abs((sigMob2(chan_i, ep_i) - mobM(1)) / mobM(2));
@@ -234,8 +263,8 @@ if strcmpi(chDetect, 'yes')
         tic
         fprintf(['Interpolating ' num2str(badChanN) ' channels...'])
         
-        psgIN.data = fun_interpolate_data(psgIN.data, psgIN.chans, badchans);
-        badchans = zeros(length(psgIN.chans));
+        dataIN.data = fun_interpolate_data(dataIN.data, dataIN.chans, badchans);
+        badchans = zeros(length(dataIN.chans));
         
         interpTime = toc;
         disp(['Finished in ' num2str(interpTime) ' seconds'])
@@ -257,7 +286,7 @@ if strcmpi(epDetect, 'yes')
     % Find each sleep stage
     stageType = unique(sleepstages.stages(sleepstages.stages > 0 & sleepstages.stages < 6));
     
-    stageChanMask = zeros(length(psgIN.chans), length(indexepochs(winSize * psgIN.hdr.srate, psgIN.hdr.samples)));
+    stageChanMask = zeros(length(dataIN.chans), length(indexepochs(winSize * dataIN.hdr.srate, dataIN.hdr.samples)));
     
     % Loop through each sleep stage
     
@@ -266,23 +295,23 @@ if strcmpi(epDetect, 'yes')
         fprintf(['Stage ' num2str(stageType(stage_i)) '... '])
         
         % Subset just that sleepstage
-        psgSub = fun_subset_data(psgIN, sleepstages, [], 'stage', stageType(stage_i),...
+        psgSub = fun_subset_data(dataIN, sleepstages, [], 'stage', stageType(stage_i),...
             'Verbose', 'no');
         
         % Index epochs
         epochIdx = indexepochs(winSize * psgSub.hdr.srate, psgSub.hdr.samples);
         
         % Create stage mask
-        stageMask = zeros(length(psgIN.chans), size(epochIdx, 1));
+        stageMask = zeros(length(dataIN.chans), size(epochIdx, 1));
         
         % Create Hjorth array
-        sigAct = zeros(length(psgIN.chans), size(epochIdx, 1));
-        sigMob = zeros(length(psgIN.chans), size(epochIdx, 1));
-        sigCom = zeros(length(psgIN.chans), size(epochIdx, 1));
+        sigAct = zeros(length(dataIN.chans), size(epochIdx, 1));
+        sigMob = zeros(length(dataIN.chans), size(epochIdx, 1));
+        sigCom = zeros(length(dataIN.chans), size(epochIdx, 1));
         
         % Loop over each channel
         
-        for chan_i = 1:length(psgIN.chans)
+        for chan_i = 1:length(dataIN.chans)
             
             % Loop over each epoch
             
@@ -302,13 +331,13 @@ if strcmpi(epDetect, 'yes')
         
         % Find channels/epochs above threshold
         
-        for chan_i = 1:length(psgIN.chans)
+        for chan_i = 1:length(dataIN.chans)
             
             for it_i = 1:epIterations
                 
-                actT = find(sigAct(chan_i,:) > mean(sigAct(chan_i,:), 'omitnan') + epEpochThresh * std(sigAct(chan_i,:), 'omitnan'));
-                mobT = find(sigMob(chan_i,:) > mean(sigMob(chan_i,:), 'omitnan') + epEpochThresh * std(sigMob(chan_i,:), 'omitnan'));
-                comT = find(sigCom(chan_i,:) > mean(sigCom(chan_i,:), 'omitnan') + epEpochThresh * std(sigCom(chan_i,:), 'omitnan'));
+                actT = find(sigAct(chan_i,:) > nanmean(sigAct(chan_i,:)) + epEpochThresh * nanstd(sigAct(chan_i,:)));
+                mobT = find(sigMob(chan_i,:) > nanmean(sigMob(chan_i,:)) + epEpochThresh * nanstd(sigMob(chan_i,:)));
+                comT = find(sigCom(chan_i,:) > nanmean(sigCom(chan_i,:)) + epEpochThresh * nanstd(sigCom(chan_i,:)));
                 
                 stageMask(chan_i, actT) = 1;
                 stageMask(chan_i, mobT) = 1;
@@ -375,23 +404,23 @@ if strcmpi(epDetect, 'yes')
         tic
         fprintf('Interpolating channels...')
         
-        epochIdx = indexepochs(winSize * psgIN.hdr.srate, psgIN.hdr.samples);
+        epochIdx = indexepochs(winSize * dataIN.hdr.srate, dataIN.hdr.samples);
         stageChanMask(chans2Ignore, :) = zeros(length(chans2Ignore), size(stageChanMask, 2));
         
-        psgOUT = psgIN;
-        psgOUT.data = zeros(length(psgIN.chans), psgIN.hdr.samples);
+        dataOUT = dataIN;
+        dataOUT.data = zeros(length(dataIN.chans), dataIN.hdr.samples);
         
         for ep_i = 1:size(epochIdx, 1)
             
             if find(stageChanMask(:, ep_i)) < epChanThresh
                 
-                psgOUT.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)) = fun_interpolate_data(...
-                    psgIN.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)), psgIN.chans, stageChanMask(:, ep_i));
+                dataOUT.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)) = fun_interpolate_data(...
+                    dataIN.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)), dataIN.chans, stageChanMask(:, ep_i));
                 
                 badepochs(ep_i) = 0;
                 
             else
-                psgOUT.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)) = psgIN.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2));
+                dataOUT.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2)) = dataIN.data(:, epochIdx(ep_i, 1):epochIdx(ep_i, 2));
                 
             end
             
@@ -401,7 +430,7 @@ if strcmpi(epDetect, 'yes')
         disp(['Finished in ' num2str(interpTime) ' seconds'])
         
     else
-        psgOUT = psgIN;
+        dataOUT = dataIN;
     end
 end
 %% Create ar struct

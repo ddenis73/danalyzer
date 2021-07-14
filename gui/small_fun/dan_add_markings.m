@@ -1,7 +1,18 @@
 function handles = dan_add_markings(handles, timeVec)
-
+%
 % Dump all the extra crap onto the screen such as bad epoch markings,
 % notations, segments blah blah blah
+
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
+%
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
+%
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
 
 %% Mark bad epochs
 

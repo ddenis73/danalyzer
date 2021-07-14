@@ -1,21 +1,15 @@
 function [psgOUT, scoresOUT] = subsetepoch(psg, scores, ar, epoch)
+%%
+% Authors:  Dan Denis
+% Date:     2021-07-14
 %
-
-%% © 2021 Dan Denis, PhD
+% Remarks:
+%   Free use and modification of this code is permitted, provided that any
+%   modifications are also freely distributed
 %
-% This function is part of the danalyzer toolbox. danalyzer is free
-% software: you can redistribute it and/or modify it under the terms of the
-% GNU General Public License as published by the Free Software Foundation,
-% either version 3 of the License or any later version.
-%
-% danalyzer is distributed with the hope that others will find it useful.
-% It comes without any warranty; without even the implied warranty of
-% merchantability or fitness for a particular purpose. See the GNU General
-% Public License for more details.
-
-% danalyzer is intended for research purposes only. Any commercial or
-% medical use of this software is prohibited. The author accepts no
-% responsibility for its use in this manner
+%   When using this code or modifications of this code, please cite:
+%       Denis D (2021). danalyzer. DOI: 10.5281/zenodo.5104418
+%%
 
 % Get length of epoch in samples
 epochSampleLength = 30 * psg.hdr.srate;
