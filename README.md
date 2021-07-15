@@ -12,6 +12,6 @@ If you use any of the tools (power spectral density, sleep/slow oscillation dete
 
 Denis, D., Mylonas, D., Poskanzer, C., Bursal, V., Payne, J.D., and Stickgold, R. (2021). Sleep spindles preferentially consolidate weakly encoded memories. The Journal of Neuroscience, 41 (18), 4088-4099. DOI: 10.1523/JNEUROSCI.0818-20.2021
 
-For installation instructions and help getting started, please see the official documentation: 
+For installation instructions and help getting started, please see the (WIP) official documentation: 
 
 https://ddenis73.github.io/danalyzer-docs/
