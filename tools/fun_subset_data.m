@@ -127,7 +127,7 @@ if strcmpi(interp, 'yes')
     fprintf(['Interpolating ' num2str(length(interpIdx)) ' bad channels.\n'])
     % Run the interpolation
     if ~isempty(interpIdx)
-        psgIN.data = fun_interpolate_data(psgIN.data, [psgIN.chans.X], [psgIN.chans.Y], [psgIN.chans.Z], interpIdx);
+        psgIN.data = fun_interpolate_data(psgIN.data, psgIN.chans, ar.badchans);
     end
     
 end
