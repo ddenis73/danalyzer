@@ -15,8 +15,8 @@
 clear
 %% Setup
 
-% cd into folder containing example data
-cd 'C:\Users\ddenis\Downloads\exampleData-20210715T000213Z-001\exampleData'
+% CD into the folder containing the example data
+cd 'C:\Users\ddenis\Google Drive\exampleData'
 
 % Set parameters
 
@@ -34,23 +34,26 @@ mastChans = {'A1' 'A2'};
 notchFilter = [58 62]; %Hz
 eegFilter   = [0.3 35]; %Hz
 eogFilter   = [0.3 35]; %Hz
-emgFilter   = [10 99]; %Hz
+emgFilter   = [10 100]; %Hz
 
 % Save location
 saveFolder = pwd;
-saveName = 'exampleData_PP';
+saveName = 'HD_exampleData_PP';
 
 %% Let's start
 
-% Read the edf file into MATLAB
-EEG = pop_biosig('exampleData.edf', 'importevent', 'off', 'importannot', 'off');
+% Read the edf data into MATLAB
+% If your data is in .edf format
+EEG = pop_biosig('HD_exampleData.edf', 'importevent', 'off', 'importannot', 'off');
+
+% If it is in BrainVision format
+%EEG = pop_loadbv(pwd, 'filename.vhdr');
 
 % Add channel locations
 EEG.chanlocs = chanlocs;
 
-% Let's look at the data in it's raw state
+% Optional - Look at the data in it's raw state
 data_viewer('psg', eeglab2danalyzer(EEG))
-
 %% Remove unwanted channels
 
 % Find the index of channels marked for removal
@@ -68,9 +71,8 @@ end
 % Band-stop (notch filter) the data
 EEG = pop_eegfiltnew(EEG, notchFilter(1), notchFilter(2), [], 1);
 
-% Let's look at the effect of the notch filter
+% Optional - Look at the effect of the notch filter
 data_viewer('psg', eeglab2danalyzer(EEG))
-
 
 %% Separate into different channel types
 
@@ -125,7 +127,7 @@ EEG.chanlocs = [myEEG.chanlocs myEOG.chanlocs myEMG.chanlocs];
 EEG.nbchan   = length(EEG.chanlocs);
 EEG = eeg_checkset(EEG);
 
-% Let's look at the fully preprocessed data
+% Optional - Look at the fully preprocessed high density file
 data_viewer('psg', eeglab2danalyzer(EEG))
 
 %% Save the preprocessed file

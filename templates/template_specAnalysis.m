@@ -13,8 +13,12 @@ clear
 
 %% Setup
 
-% cd into folder containing example data
-cd 'C:\Users\ddenis\Downloads\exampleData-20210715T000213Z-001\exampleData'
+% CD into the folder containing the example data
+cd 'C:\Users\ddenis\Google Drive\exampleData'
+
+% Channels to remove
+chans2Remove = {'LOC' 'ROC' 'EMG1-EMG2'};
+
 % Spectral power analysis settings
 winSize      = 5; % Size of the Hamming window (in seconds)
 winOlap      = 0.5; % Window overlap (proportion)
@@ -37,12 +41,12 @@ ssFilt = [wavFreq - (wavBand/2) wavFreq + (wavBand/2)]; % Spindle range bandpass
 
 % Save location
 saveFolder = pwd;
-saveName = 'exampleData_specData';
+saveName = 'exampleSpecData';
 
 %% Load the data
 
 % Load the preprocessed dataset
-EEG = pop_loadset(fullfile(pwd, 'exampleData_PP.set'));
+EEG = pop_loadset(fullfile(pwd, 'HD_exampleData_PP.set'));
 
 % Load sleep stage information
 load(fullfile(pwd, 'exampleScores.mat'))
@@ -50,18 +54,20 @@ load(fullfile(pwd, 'exampleScores.mat'))
 % Load artifact rejection information
 load(fullfile(pwd, 'exampleAR.mat'))
 
-% View the data
+% Optional - View the data
 data_viewer('psg', eeglab2danalyzer(EEG), 'sleepstages', sleepstages, 'ar', ar)
 
 %% Separate into NREM and REM sleep
 
-% Select all clean stage 2 and stage 3 epochs. Remove the non-EEG channels
+% Select all clean stage 2 and stage 3 epochs, interpolate bad channels,
+% and remove the non-EEG channels
 myNREM = fun_subset_data(eeglab2danalyzer(EEG), sleepstages, ar, 'stage', 2:3,...
-    'RemoveChannels', {'LOC' 'ROC' 'EMG1-EMG2'}, 'Interpolate', 'yes');
+    'RemoveChannels', chans2Remove, 'Interpolate', 'yes');
 
-% Select all clean REM epochs
+% Select all clean stage 2 and stage 3 epochs, interpolate bad channels,
+% and remove the non-EEG channels
 myREM  = fun_subset_data(eeglab2danalyzer(EEG), sleepstages, ar, 'stage', 5,...
-    'RemoveChannels', {'LOC' 'ROC' 'EMG1-EMG2'}, 'Interpolate', 'yes');
+    'RemoveChannels', chans2Remove, 'Interpolate', 'yes');
 
 %% Spectral power analysis
 
@@ -129,8 +135,7 @@ title(['REM PSD: ' num2str(bandLims(1)) '-' num2str(bandLims(2)) ' Hz'])
 
 % Detect sleep spindles during NREM sleep. The first 3 arguments are
 % required. See help fun_sleep_spindles for information about each optional
-% input. After watching the week 5 class, you should understand
-% what each argument is referring to
+% input.
 
 % The first output is a 1xnChan structure containing information about
 % every detected spindle. The second output is a 1xnChan structure
@@ -164,8 +169,7 @@ nremDelta = pop_eegfiltnew(danalyzer2eeglab(myNREM), soFilt(1), soFilt(2));
 
 % Now we detect the slow oscillations. The first 3 arguments are
 % required. See help fun_slow_oscillations for information about each optional
-% input. After watching the week 5 class, you should understand
-% what each argument is referring to
+% input. 
 
 % The first output is a 1xnChan structure containing information about
 % every detected slow oscillation. The second output is a 1xnChan structure
@@ -181,21 +185,21 @@ figure
 subplot(131)
 topoplot([soSum.soDensity], myNREM.chans, 'MapLimits', 'maxmin', 'Electrodes', 'off');
 colorbar
-colormap(gca, hot)
+colormap(hot)
 title('NREM SO density')
 
 % Peak-to-peak amplitude
 subplot(132)
 topoplot([soSum.soPPAmplitude], myNREM.chans, 'MapLimits', 'maxmin', 'Electrodes', 'off');
 colorbar
-colormap(gca, hot)
+colormap(hot)
 title('NREM SO amplitude')
 
 % Peak-to-peak slope
 subplot(133)
 topoplot([soSum.soPPSlope], myNREM.chans, 'MapLimits', 'maxmin', 'Electrodes', 'off');
 colorbar
-colormap(gca, hot)
+colormap(hot)
 title('NREM SO slope')
 
 %% SO-spindle coupling

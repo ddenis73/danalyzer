@@ -202,16 +202,35 @@ for i = 0:6
 end
 
 
-if ~isnat(lOffTime)
-    lOffString = datestr(lOffTime, 'HH:mm:ss.FFF');
-else
-    lOffString = ' ';
+if ischar(lOffTime)
+    if ~isempty(lOffTime)
+        lOffString = datestr(lOffTime, 'HH:mm:ss.FFF');
+    else
+        lOffString = ' ';
+    end
+    
+elseif strcmpi(class(lOffTime), 'datetime')
+    if ~isnat(lOffTime)
+        lOffString = datestr(lOffTime, 'HH:mm:ss.FFF');
+    else
+        lOffString = ' ';
+    end
 end
 
-if ~isnat(lOnTime)
-    lOnString = datestr(lOnTime, 'HH:mm:ss.FFF');
-else
-    lOnString = ' ';
+
+if ischar(lOnTime)
+    if ~isempty(lOnTime)
+        lOnString = datestr(lOnTime, 'HH:mm:ss.FFF');
+    else
+        lOnString = ' ';
+    end
+    
+elseif strcmpi(class(lOnTime), 'datetime')
+    if ~isnat(lOnTime)
+        lOnString = datestr(lOnTime, 'HH:mm:ss.FFF');
+    else
+        lOnString = ' ';
+    end
 end
 
 sleepStats.lOff = lOffString;
