@@ -2,6 +2,10 @@
  
 danalyzer is a set of MATLAB functions for the analysis of sleep electroencephography data. The toolbox can be broken down into two main parts. The GUI is a graphical interface for visualizing sleep EEG time series. The GUI has functions for manual sleep scoring and artifact rejection. The "tools", are a set of functions for performing standard analyses of sleep EEG data (power spectral density, sleep spindle and slow oscillation detection, and slow-oscillation spindle coupling analysis).
 
+The templates folder contains some example scripts that might come in useful for analyzing your own data. Example data can be downloaded from here:
+
+https://osf.io/ezwhv/
+
 danalyzer comes with absolutely no guarentee or warrenty of any kind. The functions are made public in case they are of use to anyone.
 
 If you use danalyzer in your work, please cite the toolbox as follows:
